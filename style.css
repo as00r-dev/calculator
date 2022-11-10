@@ -9,6 +9,10 @@
 	box-sizing: border-box;
 }
 
+svg {
+	fill: #fdb82d;
+}
+
 body {
 	font-family: "Roboto", sans-serif;
 	display: flex;
