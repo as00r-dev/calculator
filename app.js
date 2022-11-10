@@ -14,7 +14,7 @@ const power = (a, b) => Math.pow(a, b).toFixed(1);
 const squareRoot = (a) => Math.sqrt(a).toFixed(1);
 
 // Operation triggers
-const operateBinary = (a, b, symbol) => {
+function operateBinary(a, b, symbol) {
 	switch (symbol) {
 		case "+":
 			return add(a, b);
@@ -29,9 +29,9 @@ const operateBinary = (a, b, symbol) => {
 		default:
 			break;
 	}
-};
+}
 
-const operateUnary = (a, symbol) => {
+function operateUnary(a, symbol) {
 	switch (symbol) {
 		case "±":
 			return -a;
@@ -42,17 +42,52 @@ const operateUnary = (a, symbol) => {
 		default:
 			break;
 	}
-};
+}
+
+// global variables
+let number = "";
 
 // select elements
-const BUTTONS = document.querySelectorAll(".button");
+const NUMBERS = document.querySelectorAll(".number");
+const SYMBOLS = document.querySelectorAll(".symbol");
+const ANSWER = document.querySelector(".answer");
+const HISTORY = document.querySelector(".history");
 
 // event listeners
-BUTTONS.forEach((button) => {
-	button.addEventListener("click", clickHandler);
+NUMBERS.forEach((button) => {
+	button.addEventListener("click", numberHandler);
+});
+
+SYMBOLS.forEach((button) => {
+	button.addEventListener("click", symbolHandler);
 });
 
 // event handlers
-function clickHandler(e) {
+function numberHandler(e) {
 	const input = e.target.textContent;
+	const p = document.createElement("p");
+	const warning = document.createElement("p");
+
+	if (input === "." && number.split(".").length > 1) {
+		warning.textContent = "Can't add more than 1 decimal";
+		HISTORY.appendChild(warning);
+	} else if (number.split(".")[1] && number.split(".")[1].length > 1) {
+		warning.textContent = "Only 1 digit after decimal allowed.";
+		HISTORY.appendChild(warning);
+	} else {
+		number += input;
+		p.textContent = (+number).toFixed(1);
+		ANSWER.innerHTML = "";
+		ANSWER.appendChild(p);
+	}
+}
+
+function symbolHandler(e) {
+	const input = e.target.textContent;
+	const p = document.createElement("p");
+	let answerBoxText = ANSWER.textContent;
+	answerBoxText += " " + input;
+	ANSWER.innerHTML = "";
+	p.textContent = answerBoxText;
+	ANSWER.appendChild(p);
 }
