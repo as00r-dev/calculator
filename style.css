@@ -32,7 +32,6 @@ body {
 	padding: 12px 16px;
 }
 
-.history,
 .answer {
 	text-align: right;
 	font-family: "Digital-7", sans-serif;
@@ -43,12 +42,9 @@ body {
 .history {
 	height: 150px;
 	overflow-y: scroll;
-	color: #686868;
 	font-size: 21px;
 	font-weight: 500;
-	padding: 12px 16px;
-	background: #121212;
-	box-shadow: inset 5px 5px 10px #070707, inset -5px -5px 10px #1d1d1d;
+	color: #868686;
 }
 
 .history::-webkit-scrollbar {
@@ -62,7 +58,7 @@ body {
 
 .answer {
 	color: #a5aead;
-	font-size: 36px;
+	font-size: 48px;
 	padding: 28px 16px;
 	background: #596c64;
 	box-shadow: inset 6px 6px 12px #44524c, inset -6px -6px 12px #6e867c;
