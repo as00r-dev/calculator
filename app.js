@@ -45,9 +45,10 @@ function operateUnary(a, symbol) {
 }
 
 // global variables
-let number = "";
+let displayValue = "";
 
 // select elements
+const BUTTONS = document.querySelectorAll(".button");
 const NUMBERS = document.querySelectorAll(".number");
 const SYMBOLS = document.querySelectorAll(".symbol");
 const ANSWER = document.querySelector(".answer");
@@ -55,39 +56,21 @@ const HISTORY = document.querySelector(".history");
 
 // event listeners
 NUMBERS.forEach((button) => {
-	button.addEventListener("click", numberHandler);
+	button.addEventListener("click", inputHandler);
 });
 
 SYMBOLS.forEach((button) => {
-	button.addEventListener("click", symbolHandler);
+	button.addEventListener("click", inputHandler);
 });
 
 // event handlers
-function numberHandler(e) {
-	const input = e.target.textContent;
+function inputHandler(e) {
+	displayValue += e.target.textContent;
 	const p = document.createElement("p");
-	const warning = document.createElement("p");
-
-	if (input === "." && number.split(".").length > 1) {
-		warning.textContent = "Can't add more than 1 decimal";
-		HISTORY.appendChild(warning);
-	} else if (number.split(".")[1] && number.split(".")[1].length > 1) {
-		warning.textContent = "Only 1 digit after decimal allowed.";
-		HISTORY.appendChild(warning);
-	} else {
-		number += input;
-		p.textContent = (+number).toFixed(1);
-		ANSWER.innerHTML = "";
-		ANSWER.appendChild(p);
-	}
-}
-
-function symbolHandler(e) {
-	const input = e.target.textContent;
-	const p = document.createElement("p");
-	let answerBoxText = ANSWER.textContent;
-	answerBoxText += " " + input;
+	p.textContent = displayValue;
 	ANSWER.innerHTML = "";
-	p.textContent = answerBoxText;
 	ANSWER.appendChild(p);
 }
+
+// for formatting display value
+function displayFormatter() {}
