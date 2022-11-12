@@ -71,13 +71,12 @@ SYMBOLS.forEach((button) => {
 
 function numberHandler(e) {
 	const input = e.target.textContent;
-	if (input === ".") {
+	if (input === "." && calculator.a.split(".")[1] !== "0") {
 		// handle "."
-		if (calculator.a.split(".")[1] !== "0") {
-			const p = document.createElement("p");
-			p.textContent = "only 1 decimal point allowed";
-			HISTORY.appendChild(p);
-		}
+		displayOnSecondaryScreen("only 1 decimal point allowed");
+	} else if (input === "." && calculator.b.split(".")[1] !== "0") {
+		// handle "."
+		displayOnSecondaryScreen("only 1 decimal point allowed");
 	} else if (calculator.operator === "") {
 		// handle nums
 		if (calculator.a === "") {
@@ -91,9 +90,7 @@ function numberHandler(e) {
 		} else {
 			// calculator.a has already a digit after decimal
 			// show error
-			const p = document.createElement("p");
-			p.textContent = "only 1 decimal digit allowed";
-			HISTORY.appendChild(p);
+			displayOnSecondaryScreen("only 1 decimal digit allowed");
 		}
 	} else {
 		// handle nums
@@ -106,37 +103,67 @@ function numberHandler(e) {
 			tempArr[1] = input;
 			calculator.b = tempArr.join(".");
 		} else {
-			// calculator.a has already a digit after decimal
+			// calculator.b has already a digit after decimal
 			// show error
-			const p = document.createElement("p");
-			p.textContent = "only 1 decimal digit allowed";
-			HISTORY.appendChild(p);
+			displayOnSecondaryScreen("only 1 decimal digit allowed");
 		}
 	}
-	const display = document.createElement("p");
-	display.textContent = `${calculator.a} ${calculator.operator} ${calculator.b}`;
-	ANSWER.innerHTML = "";
-	ANSWER.appendChild(display);
+	displayOnMainScreen(`${calculator.a} ${calculator.operator} ${calculator.b}`);
 }
 
 function symbolHandler(e) {
 	const input = e.target.textContent;
-
+	displayOnMainScreen(`${calculator.a} ${calculator.operator} ${calculator.b}`);
 	switch (input) {
 		case "+":
-			calculator.operator = "+";
+			if (calculator.operator !== "") {
+				displayOnMainScreen(
+					operateBinary(+calculator.a, +calculator.b, calculator.operator)
+				);
+				displayOnSecondaryScreen(
+					`${calculator.a} ${calculator.operator} ${calculator.b}`
+				);
+				calculator.a = ANSWER.textContent;
+				calculator.b = "";
+				calculator.operator = "";
+			} else {
+				calculator.operator = "+";
+				displayOnMainScreen(
+					`${calculator.a} ${calculator.operator} ${calculator.b}`
+				);
+			}
 			break;
 		case "√":
 			calculator.a = squareRoot(+calculator.a);
-			const display = document.createElement("p");
-			display.textContent = `${calculator.a}`;
-			ANSWER.innerHTML = "";
-			ANSWER.appendChild(display);
-			break;
-		case "=":
-			console.log(
-				operateBinary(+calculator.a, +calculator.b, calculator.operator)
+			displayOnMainScreen(
+				`${calculator.a} ${calculator.operator} ${calculator.b}`
 			);
 			break;
+		case "=":
+			displayOnMainScreen(
+				operateBinary(+calculator.a, +calculator.b, calculator.operator)
+			);
+			displayOnSecondaryScreen(
+				`${calculator.a} ${calculator.operator} ${calculator.b}`
+			);
+			calculator.a = "";
+			calculator.b = "";
+			calculator.operator = "";
+			break;
 	}
+}
+
+// display screen
+
+function displayOnMainScreen(s) {
+	const display = document.createElement("p");
+	display.textContent = s;
+	ANSWER.innerHTML = "";
+	ANSWER.appendChild(display);
+}
+
+function displayOnSecondaryScreen(s) {
+	const p = document.createElement("p");
+	p.textContent = s;
+	HISTORY.appendChild(p);
 }
