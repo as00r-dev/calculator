@@ -71,14 +71,8 @@ SYMBOLS.forEach((button) => {
 
 function numberHandler(e) {
 	const input = e.target.textContent;
-	if (input === "." && calculator.a.split(".")[1] !== "0") {
-		// handle "."
-		displayOnSecondaryScreen("only 1 decimal point allowed");
-	} else if (input === "." && calculator.b.split(".")[1] !== "0") {
-		// handle "."
-		displayOnSecondaryScreen("only 1 decimal point allowed");
-	} else if (calculator.operator === "") {
-		// handle nums
+	if (calculator.operator === "" && input !== ".") {
+		// first number (calculator.a)
 		if (calculator.a === "") {
 			// no number in calculator.a
 			calculator.a += (+input).toFixed(1);
@@ -87,13 +81,9 @@ function numberHandler(e) {
 			let tempArr = calculator.a.split(".");
 			tempArr[1] = input;
 			calculator.a = tempArr.join(".");
-		} else {
-			// calculator.a has already a digit after decimal
-			// show error
-			displayOnSecondaryScreen("only 1 decimal digit allowed");
 		}
-	} else {
-		// handle nums
+	} else if (input !== ".") {
+		// second number (calculator.b)
 		if (calculator.b === "") {
 			// no number in calculator.a
 			calculator.b += (+input).toFixed(1);
@@ -102,10 +92,6 @@ function numberHandler(e) {
 			let tempArr = calculator.b.split(".");
 			tempArr[1] = input;
 			calculator.b = tempArr.join(".");
-		} else {
-			// calculator.b has already a digit after decimal
-			// show error
-			displayOnSecondaryScreen("only 1 decimal digit allowed");
 		}
 	}
 	displayOnMainScreen(`${calculator.a} ${calculator.operator} ${calculator.b}`);
