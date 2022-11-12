@@ -50,6 +50,7 @@ const calculator = {
 	b: "",
 	operator: "",
 };
+let hasUserEnteredDecimal = false;
 
 // select elements
 const BUTTONS = document.querySelectorAll(".button");
@@ -71,6 +72,9 @@ SYMBOLS.forEach((button) => {
 
 function numberHandler(e) {
 	const input = e.target.textContent;
+	if (input === ".") {
+		hasUserEnteredDecimal = true;
+	}
 	if (calculator.operator === "" && input !== ".") {
 		// first number (calculator.a)
 		if (calculator.a === "") {
@@ -79,7 +83,12 @@ function numberHandler(e) {
 		} else if (calculator.a.split(".")[1] === "0") {
 			// calculator.a is like x.0
 			let tempArr = calculator.a.split(".");
-			tempArr[1] = input;
+			if (!hasUserEnteredDecimal) {
+				tempArr[0] += input;
+			} else {
+				tempArr[1] = input;
+				hasUserEnteredDecimal = false;
+			}
 			calculator.a = tempArr.join(".");
 		}
 	} else if (input !== ".") {
@@ -90,7 +99,12 @@ function numberHandler(e) {
 		} else if (calculator.b.split(".")[1] === "0") {
 			// calculator.a is like x.0
 			let tempArr = calculator.b.split(".");
-			tempArr[1] = input;
+			if (!hasUserEnteredDecimal) {
+				tempArr[0] += input;
+			} else {
+				tempArr[1] = input;
+				hasUserEnteredDecimal = false;
+			}
 			calculator.b = tempArr.join(".");
 		}
 	}
