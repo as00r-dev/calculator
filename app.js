@@ -45,7 +45,11 @@ function operateUnary(a, symbol) {
 }
 
 // global variables
-let displayValue = "";
+const calculator = {
+	a: "",
+	b: "",
+	operator: "",
+};
 
 // select elements
 const BUTTONS = document.querySelectorAll(".button");
@@ -56,21 +60,83 @@ const HISTORY = document.querySelector(".history");
 
 // event listeners
 NUMBERS.forEach((button) => {
-	button.addEventListener("click", inputHandler);
+	button.addEventListener("click", numberHandler);
 });
 
 SYMBOLS.forEach((button) => {
-	button.addEventListener("click", inputHandler);
+	button.addEventListener("click", symbolHandler);
 });
 
 // event handlers
-function inputHandler(e) {
-	displayValue += e.target.textContent;
-	const p = document.createElement("p");
-	p.textContent = displayValue;
+
+function numberHandler(e) {
+	const input = e.target.textContent;
+	if (input === ".") {
+		// handle "."
+		if (calculator.a.split(".")[1] !== "0") {
+			const p = document.createElement("p");
+			p.textContent = "only 1 decimal point allowed";
+			HISTORY.appendChild(p);
+		}
+	} else if (calculator.operator === "") {
+		// handle nums
+		if (calculator.a === "") {
+			// no number in calculator.a
+			calculator.a += (+input).toFixed(1);
+		} else if (calculator.a.split(".")[1] === "0") {
+			// calculator.a is like x.0
+			let tempArr = calculator.a.split(".");
+			tempArr[1] = input;
+			calculator.a = tempArr.join(".");
+		} else {
+			// calculator.a has already a digit after decimal
+			// show error
+			const p = document.createElement("p");
+			p.textContent = "only 1 decimal digit allowed";
+			HISTORY.appendChild(p);
+		}
+	} else {
+		// handle nums
+		if (calculator.b === "") {
+			// no number in calculator.a
+			calculator.b += (+input).toFixed(1);
+		} else if (calculator.b.split(".")[1] === "0") {
+			// calculator.a is like x.0
+			let tempArr = calculator.b.split(".");
+			tempArr[1] = input;
+			calculator.b = tempArr.join(".");
+		} else {
+			// calculator.a has already a digit after decimal
+			// show error
+			const p = document.createElement("p");
+			p.textContent = "only 1 decimal digit allowed";
+			HISTORY.appendChild(p);
+		}
+	}
+	const display = document.createElement("p");
+	display.textContent = `${calculator.a} ${calculator.operator} ${calculator.b}`;
 	ANSWER.innerHTML = "";
-	ANSWER.appendChild(p);
+	ANSWER.appendChild(display);
 }
 
-// for formatting display value
-function displayFormatter() {}
+function symbolHandler(e) {
+	const input = e.target.textContent;
+
+	switch (input) {
+		case "+":
+			calculator.operator = "+";
+			break;
+		case "√":
+			calculator.a = squareRoot(+calculator.a);
+			const display = document.createElement("p");
+			display.textContent = `${calculator.a}`;
+			ANSWER.innerHTML = "";
+			ANSWER.appendChild(display);
+			break;
+		case "=":
+			console.log(
+				operateBinary(+calculator.a, +calculator.b, calculator.operator)
+			);
+			break;
+	}
+}

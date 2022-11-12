@@ -52,7 +52,7 @@ body {
 	overflow-y: scroll;
 	font-size: 18px;
 	font-weight: 500;
-	color: #868686;
+	color: #121212;
 	display: flex;
 	flex-direction: column;
 	justify-content: end;
@@ -68,7 +68,7 @@ body {
 }
 
 .screen {
-	color: #a5aead;
+	color: #121212;
 	font-size: 48px;
 	padding: 28px 16px;
 	background: #596c64;
