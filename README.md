@@ -17,7 +17,9 @@ Design Inspiration & Credit : https://dribbble.com/shots/9631225--Design-for-Dai
 ### Installing
 
 In order to use, just clone this repo, and run `index.html`
-on any browser or just go to this link to check live version:- https://as00r-dev.github.io/calculator/
+on any browser or just go to this link to check live version:- https://as00r-dev.github.io/calculator/.
+Feel free to copy, remix and use this code for your own projects. If you get stuck, let me know and i
+will help.
 
 ### Folder structure
 
