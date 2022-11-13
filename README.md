@@ -10,7 +10,7 @@ and also some unary operations.
 I tried to implement real time input verification so that "1.222222" automatically
 converts to "1.2" and on screen "1.22222" is not shown.
 
-Design Reference & Credit : https://dribbble.com/shots/9631225--Design-for-DailyUi-Day004-Calculator/attachments/1659581?mode=media
+Design Inspiration & Credit : https://dribbble.com/shots/9631225--Design-for-DailyUi-Day004-Calculator/attachments/1659581?mode=media
 
 ## Usage
 
