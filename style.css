@@ -45,17 +45,42 @@ body {
 
 .answer {
 	height: 50px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 3px;
+	height: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }
 
 .history {
 	height: 150px;
 	overflow-y: scroll;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 500;
 	color: #121212;
 	display: flex;
 	flex-direction: column;
 	justify-content: end;
+	overflow-x: scroll;
+	overflow-y: hidden;
 }
 
 .history::-webkit-scrollbar {

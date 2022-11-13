@@ -11,7 +11,14 @@ const percentage = (a) => (a / 100).toFixed(1);
 
 const power = (a, b) => Math.pow(a, b).toFixed(1);
 
-const squareRoot = (a) => Math.sqrt(a).toFixed(1);
+const squareRoot = (a) => {
+	if (a < 0) {
+		displayOnSecondaryScreen("can't work with imaginary numbers.");
+		return a;
+	} else {
+		return Math.sqrt(a).toFixed(1);
+	}
+};
 
 // Operation triggers
 function operateBinary(a, b, symbol) {
@@ -72,7 +79,10 @@ SYMBOLS.forEach((button) => {
 
 function numberHandler(e) {
 	const input = e.target.textContent;
-	if (input === ".") {
+	if (input === "." && calculator.a) {
+		hasUserEnteredDecimal = true;
+	}
+	if (input === "." && calculator.b) {
 		hasUserEnteredDecimal = true;
 	}
 	if (calculator.operator === "" && input !== ".") {
@@ -94,10 +104,10 @@ function numberHandler(e) {
 	} else if (input !== ".") {
 		// second number (calculator.b)
 		if (calculator.b === "") {
-			// no number in calculator.a
+			// no number in calculator.b
 			calculator.b += (+input).toFixed(1);
 		} else if (calculator.b.split(".")[1] === "0") {
-			// calculator.a is like x.0
+			// calculator.b is like x.0
 			let tempArr = calculator.b.split(".");
 			if (!hasUserEnteredDecimal) {
 				tempArr[0] += input;
@@ -116,45 +126,98 @@ function symbolHandler(e) {
 	displayOnMainScreen(`${calculator.a} ${calculator.operator} ${calculator.b}`);
 	switch (input) {
 		case "+":
-			if (calculator.operator !== "") {
+		case "-":
+		case "÷":
+		case "×":
+		case "^":
+			if (calculator.b === "0.0" && calculator.operator === "÷") {
+				displayOnSecondaryScreen("Hello Ramanujan");
+				ANSWER.innerHTML = "";
+				calculator.a = "";
+				calculator.b = "";
+				calculator.operator = "";
+				break;
+			}
+			if (calculator.operator !== "" && calculator.a) {
 				displayOnMainScreen(
-					operateBinary(+calculator.a, +calculator.b, calculator.operator)
+					`${operateBinary(
+						+calculator.a,
+						+calculator.b,
+						calculator.operator
+					)}  ${input}`
 				);
 				displayOnSecondaryScreen(
 					`${calculator.a} ${calculator.operator} ${calculator.b}`
 				);
-				calculator.a = ANSWER.textContent;
+				calculator.a = (+ANSWER.textContent.replace(/[^0-9.]/g, "")).toFixed(1);
 				calculator.b = "";
-				calculator.operator = "";
-			} else {
-				calculator.operator = "+";
+				calculator.operator = input;
+			} else if (calculator.a) {
+				calculator.operator = input;
 				displayOnMainScreen(
 					`${calculator.a} ${calculator.operator} ${calculator.b}`
 				);
 			}
 			break;
 		case "√":
-			calculator.a = squareRoot(+calculator.a);
+		case "%":
+		case "±":
+			if (calculator.b === "0.0" && calculator.operator === "÷") {
+				displayOnSecondaryScreen("Hello Ramanujan");
+				ANSWER.innerHTML = "";
+				calculator.a = "";
+				calculator.b = "";
+				calculator.operator = "";
+				break;
+			}
+			if (calculator.a && calculator.b === "") {
+				calculator.a = operateUnary(calculator.a, input);
+			} else {
+				calculator.b = operateUnary(calculator.b, input);
+			}
 			displayOnMainScreen(
 				`${calculator.a} ${calculator.operator} ${calculator.b}`
 			);
 			break;
 		case "=":
+			if (calculator.b === "0.0" && calculator.operator === "÷") {
+				displayOnSecondaryScreen("Hello Ramanujan");
+				ANSWER.innerHTML = "";
+				calculator.a = "";
+				calculator.b = "";
+				calculator.operator = "";
+				break;
+			}
 			displayOnMainScreen(
 				operateBinary(+calculator.a, +calculator.b, calculator.operator)
 			);
 			displayOnSecondaryScreen(
 				`${calculator.a} ${calculator.operator} ${calculator.b}`
 			);
+			calculator.a = (+ANSWER.textContent.replace(/[^-0-9.]/g, "")).toFixed(1);
+			calculator.b = "";
+			calculator.operator = "";
+			break;
+		case "C":
+			displayOnMainScreen("");
 			calculator.a = "";
 			calculator.b = "";
 			calculator.operator = "";
+			break;
+		case "AC":
+			HISTORY.innerHTML = "";
+			displayOnMainScreen("");
+			calculator.a = "";
+			calculator.b = "";
+			calculator.operator = "";
+			break;
+		case "⌫":
+			displayOnSecondaryScreen("This feature coming soon. Use C or AC.");
 			break;
 	}
 }
 
 // display screen
-
 function displayOnMainScreen(s) {
 	const display = document.createElement("p");
 	display.textContent = s;
